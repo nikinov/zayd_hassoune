@@ -3,9 +3,12 @@
 SvelteKit port of the original static HTML/CSS prototype, with content taken from the
 live site at [zaydhassoune.com](https://www.zaydhassoune.com).
 
-Built as a fully prerendered static site (`@sveltejs/adapter-static`), so the `build/`
-output can be dropped on any static host — Vercel, Netlify, Cloudflare Pages or plain
-nginx.
+Every route is prerendered, so the site deploys as static CDN assets. It ships with
+`@sveltejs/adapter-vercel`; swap the adapter in [svelte.config.js](svelte.config.js) for
+`adapter-static`, `adapter-netlify` or `adapter-cloudflare` to host it elsewhere.
+
+Deploying on Vercel: set the Framework Preset to **SvelteKit** and leave Build Command,
+Output Directory and Install Command on their defaults.
 
 ## Getting started
 
@@ -17,7 +20,7 @@ npm run dev        # http://localhost:5173
 | Script            | What it does                              |
 | ----------------- | ----------------------------------------- |
 | `npm run dev`     | Dev server with HMR                       |
-| `npm run build`   | Prerenders the site into `build/`         |
+| `npm run build`   | Prerenders the site into `.vercel/output` |
 | `npm run preview` | Serves the production build locally       |
 | `npm run check`   | Type + a11y checks via `svelte-check`     |
 
