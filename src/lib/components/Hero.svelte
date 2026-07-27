@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
 	import { site } from '$lib/data/site';
-	import yachtVisual from '$lib/assets/yacht-connected-white-lines.png';
 </script>
 
 <section class="hero">
@@ -25,7 +24,16 @@
 	</div>
 
 	<div class="hero-art" use:reveal={{ delay: true }} aria-hidden="true">
-		<img class="hero-yacht-visual" src={yachtVisual} alt="" />
+		<!-- Decorative, but it is the LCP element: eager + high priority, served as
+		     AVIF/WebP at several widths by enhanced-img. -->
+		<enhanced:img
+			class="hero-yacht-visual"
+			src="$lib/assets/yacht-connected-white-lines.png?w=1200;900;600"
+			sizes="(max-width: 980px) 80vw, 45vw"
+			alt=""
+			loading="eager"
+			fetchpriority="high"
+		/>
 	</div>
 
 	<div class="hero-bottom">
@@ -116,6 +124,12 @@
 		justify-content: center;
 		align-items: center;
 		min-width: 0;
+	}
+
+	/* enhanced-img wraps the image in <picture>; keep the img itself as the flex
+	   item so the sizing below still applies. */
+	.hero-art :global(picture) {
+		display: contents;
 	}
 
 	.hero-yacht-visual {

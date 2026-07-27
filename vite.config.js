@@ -1,6 +1,9 @@
+import { enhancedImages } from '@sveltejs/enhanced-img';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [sveltekit()]
+	// enhancedImages must precede sveltekit() so it can rewrite <enhanced:img>
+	// before the Svelte compiler sees it.
+	plugins: [enhancedImages(), sveltekit()]
 });

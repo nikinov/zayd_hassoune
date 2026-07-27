@@ -2,6 +2,11 @@
 	import { nav, site } from '$lib/data/site';
 
 	let open = $state(false);
+	let scrollY = $state(0);
+
+	// Past the fold the header sits over light sections, where `difference`
+	// blending turns it into mush — swap to a solid blurred bar instead.
+	const scrolled = $derived(scrollY > 40);
 
 	$effect(() => {
 		document.body.classList.toggle('menu-open', open);
@@ -9,7 +14,9 @@
 	});
 </script>
 
-<header class="site-header">
+<svelte:window bind:scrollY />
+
+<header class="site-header" class:scrolled={scrolled || open}>
 	<a href="#top" class="brand" aria-label="Homepage">
 		<span class="brand-mark">{site.initials}</span>
 		<span class="brand-name">{site.name}</span>
@@ -45,6 +52,29 @@
 		padding: 24px 5vw;
 		z-index: 20;
 		mix-blend-mode: difference;
+		transition:
+			padding 0.35s ease,
+			background-color 0.35s ease,
+			border-color 0.35s ease;
+	}
+
+	.site-header.scrolled {
+		mix-blend-mode: normal;
+		color: var(--white);
+		padding-top: 16px;
+		padding-bottom: 16px;
+		background: rgba(5, 5, 5, 0.72);
+		backdrop-filter: blur(16px) saturate(140%);
+		-webkit-backdrop-filter: blur(16px) saturate(140%);
+		border-bottom: 1px solid var(--line);
+	}
+
+	/* Without backdrop-filter support the translucent bar would leave the light
+	   sections showing through behind white text. */
+	@supports not (backdrop-filter: blur(1px)) {
+		.site-header.scrolled {
+			background: rgba(5, 5, 5, 0.94);
+		}
 	}
 
 	.brand {

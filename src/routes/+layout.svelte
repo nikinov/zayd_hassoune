@@ -9,10 +9,13 @@
 	const year = new Date().getFullYear();
 </script>
 
+<!-- #top is also the target of the brand mark and the footer's "back to top". -->
+<a class="skip-link" href="#top">Skip to content</a>
+
 <Noise />
 <Header />
 
-<main id="top">
+<main id="top" tabindex="-1">
 	{@render children()}
 </main>
 

@@ -6,16 +6,10 @@
 	import Process from '$lib/components/Process.svelte';
 	import About from '$lib/components/About.svelte';
 	import Contact from '$lib/components/Contact.svelte';
-	import { site } from '$lib/data/site';
+	import Seo from '$lib/components/Seo.svelte';
 </script>
 
-<svelte:head>
-	<title>{site.name} — {site.tagline}</title>
-	<meta name="description" content={site.description} />
-	<meta property="og:title" content="{site.name} — {site.tagline}" />
-	<meta property="og:description" content={site.description} />
-	<meta property="og:type" content="website" />
-</svelte:head>
+<Seo />
 
 <Hero />
 <Verticals />

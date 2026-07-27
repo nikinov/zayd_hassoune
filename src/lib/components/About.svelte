@@ -1,14 +1,19 @@
 <script lang="ts">
 	import { reveal } from '$lib/actions/reveal';
 	import { principles, site } from '$lib/data/site';
-	import portrait from '$lib/assets/zayd.webp';
 </script>
 
 <section id="about" class="about">
 	<div class="about-heading" use:reveal>
 		<p class="eyebrow">About</p>
 		<h2>A relationship-driven approach.</h2>
-		<img class="portrait" src={portrait} alt="Portrait of {site.name}" loading="lazy" />
+		<enhanced:img
+			class="portrait"
+			src="$lib/assets/zayd.webp?w=600;400"
+			sizes="(max-width: 980px) 90vw, 32vw"
+			alt="{site.name}, private yacht broker based in {site.location}"
+			loading="lazy"
+		/>
 	</div>
 
 	<div class="about-copy" use:reveal={{ delay: true }}>
@@ -51,6 +56,10 @@
 		line-height: 0.98;
 		letter-spacing: -0.035em;
 		font-size: clamp(48px, 6vw, 86px);
+	}
+
+	.about-heading :global(picture) {
+		display: contents;
 	}
 
 	.portrait {
