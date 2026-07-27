@@ -1,0 +1,181 @@
+/* Design tokens, base elements and the few utilities shared across sections.
+   Everything section-specific lives in its own component. */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+:root {
+	--black: #050505;
+	--off-black: #111111;
+	--white: #f5f5f2;
+	--grey: #a9a9a3;
+	--line: rgba(255, 255, 255, 0.16);
+	--dark-line: rgba(0, 0, 0, 0.14);
+	--serif: 'Playfair Display', Georgia, serif;
+	--sans: 'Manrope', Arial, sans-serif;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	background: var(--black);
+	color: var(--white);
+	font-family: var(--sans);
+	font-weight: 300;
+	line-height: 1.6;
+}
+
+body.menu-open {
+	overflow: hidden;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+img {
+	max-width: 100%;
+}
+
+.eyebrow {
+	margin: 0 0 22px;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	font-size: 11px;
+	font-weight: 500;
+}
+
+.button {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	padding: 15px 23px;
+	border: 1px solid transparent;
+	border-radius: 999px;
+	text-transform: uppercase;
+	font-size: 11px;
+	letter-spacing: 0.13em;
+	font-weight: 600;
+	transition: 0.3s ease;
+	cursor: pointer;
+}
+
+.button-light {
+	background: var(--white);
+	color: var(--black);
+}
+
+.button-light:hover {
+	background: transparent;
+	color: var(--white);
+	border-color: var(--white);
+}
+
+.button-dark {
+	background: var(--black);
+	color: var(--white);
+}
+
+.button-dark:hover {
+	background: transparent;
+	color: var(--black);
+	border-color: var(--black);
+}
+
+.text-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-weight: 500;
+}
+
+.text-link span {
+	transition: transform 0.3s ease;
+}
+
+.text-link:hover span {
+	transform: translate(4px, -4px);
+}
+
+/* Form primitives — shared by the contact form and every questionnaire. */
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.field-full {
+	grid-column: 1 / -1;
+}
+
+.field label {
+	text-transform: uppercase;
+	font-size: 10px;
+	letter-spacing: 0.14em;
+	font-weight: 600;
+}
+
+.field input,
+.field textarea,
+.field select {
+	width: 100%;
+	border: 0;
+	border-bottom: 1px solid var(--dark-line);
+	background: transparent;
+	padding: 12px 0;
+	font: inherit;
+	color: inherit;
+	border-radius: 0;
+	outline: none;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+	border-color: var(--black);
+}
+
+.reveal {
+	opacity: 0;
+	transform: translateY(26px);
+	transition:
+		opacity 0.9s ease,
+		transform 0.9s ease;
+}
+
+.reveal.visible {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.delay-1 {
+	transition-delay: 0.18s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+}
+
+@media (max-width: 680px) {
+	.field-full {
+		grid-column: auto;
+	}
+}
