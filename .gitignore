@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 
 # SvelteKit static adapter output
 build/
+
+# Vercel
+.vercel/
