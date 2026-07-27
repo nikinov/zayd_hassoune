@@ -106,13 +106,12 @@
 <style>
 	.contact-form {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 32px;
+		gap: 28px;
 		max-width: 1000px;
 	}
 
 	.contact-form .button {
-		justify-self: start;
+		justify-self: stretch;
 		margin-top: 14px;
 	}
 
@@ -142,9 +141,14 @@
 		}
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		.contact-form {
-			grid-template-columns: 1fr;
+			grid-template-columns: 1fr 1fr;
+			gap: 32px;
+		}
+
+		.contact-form .button {
+			justify-self: start;
 		}
 	}
 </style>

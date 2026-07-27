@@ -41,10 +41,9 @@
 
 <style>
 	.about {
-		padding: 140px 7vw 120px;
+		padding: 100px 24px;
 		display: grid;
-		grid-template-columns: 0.8fr 1.2fr;
-		gap: 100px;
+		gap: 45px;
 		background: var(--white);
 		color: var(--black);
 	}
@@ -53,9 +52,9 @@
 		margin: 0;
 		font-family: var(--serif);
 		font-weight: 500;
-		line-height: 0.98;
+		line-height: 1;
 		letter-spacing: -0.035em;
-		font-size: clamp(48px, 6vw, 86px);
+		font-size: clamp(36px, 8vw, 48px);
 	}
 
 	.about-heading :global(picture) {
@@ -66,7 +65,7 @@
 		display: block;
 		width: 100%;
 		height: auto;
-		margin-top: 48px;
+		margin-top: 36px;
 		filter: grayscale(100%) contrast(1.06);
 		border-radius: 4px;
 	}
@@ -84,7 +83,6 @@
 	.principles {
 		grid-column: 1 / -1;
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
 		gap: 1px;
 		margin-top: 30px;
 		background: var(--dark-line);
@@ -92,7 +90,7 @@
 	}
 
 	.principles > div {
-		padding: 40px;
+		padding: 32px 24px;
 		background: var(--white);
 	}
 
@@ -104,8 +102,8 @@
 
 	.principles h3 {
 		font-family: var(--serif);
-		font-size: 34px;
-		margin: 36px 0 12px;
+		font-size: 30px;
+		margin: 28px 0 12px;
 		font-weight: 500;
 	}
 
@@ -115,20 +113,35 @@
 		font-size: 14px;
 	}
 
-	@media (max-width: 980px) {
+	@media (min-width: 681px) {
 		.about {
-			grid-template-columns: 1fr;
-			gap: 45px;
+			padding: 120px 7vw;
 		}
 
-		.principles {
-			grid-template-columns: 1fr;
+		.about h2 {
+			line-height: 0.98;
+			font-size: clamp(48px, 6vw, 86px);
+		}
+
+		.principles > div {
+			padding: 40px;
+		}
+
+		.principles h3 {
+			font-size: 34px;
+			margin-top: 36px;
 		}
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 981px) {
 		.about {
-			padding: 100px 24px;
+			padding: 140px 7vw 120px;
+			grid-template-columns: 0.8fr 1.2fr;
+			gap: 100px;
+		}
+
+		.principles {
+			grid-template-columns: repeat(3, 1fr);
 		}
 	}
 </style>

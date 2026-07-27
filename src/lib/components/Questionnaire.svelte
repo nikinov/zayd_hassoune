@@ -48,16 +48,15 @@
 	.dynamic-questionnaire {
 		grid-column: 1 / -1;
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 32px;
-		padding: 42px 0 10px;
+		gap: 28px;
+		padding: 36px 0 10px;
 		margin-top: 8px;
 		border-top: 1px solid var(--dark-line);
 		animation: fade-field 0.4s ease;
 	}
 
 	.questionnaire-heading {
-		grid-column: 1 / -1;
+		grid-column: auto;
 		margin-bottom: 10px;
 	}
 
@@ -73,7 +72,7 @@
 	.questionnaire-heading h3 {
 		margin: 0;
 		font-family: var(--serif);
-		font-size: clamp(32px, 4vw, 54px);
+		font-size: clamp(26px, 6.5vw, 32px);
 		line-height: 1.05;
 		font-weight: 500;
 	}
@@ -89,13 +88,19 @@
 		}
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		.dynamic-questionnaire {
-			grid-template-columns: 1fr;
+			grid-template-columns: 1fr 1fr;
+			gap: 32px;
+			padding-top: 42px;
 		}
 
 		.questionnaire-heading {
-			grid-column: auto;
+			grid-column: 1 / -1;
+		}
+
+		.questionnaire-heading h3 {
+			font-size: clamp(32px, 4vw, 54px);
 		}
 	}
 </style>

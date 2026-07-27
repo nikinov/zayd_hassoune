@@ -55,32 +55,28 @@
 </section>
 
 <style>
-	/* Yachting is the primary business, so it takes the wider column. */
 	.verticals {
 		display: grid;
-		grid-template-columns: 1.45fr 0.55fr;
 	}
 
 	.vertical-card {
-		min-height: 840px;
+		min-height: 0;
 		position: relative;
-		padding: 80px 6vw;
+		padding: 64px 24px 72px;
 		overflow: hidden;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		gap: 40px;
 	}
 
 	.vertical-yachting {
 		background: var(--white);
 		color: var(--black);
-		padding-right: 8vw;
 	}
 
 	.vertical-capital {
 		background: var(--off-black);
-		padding-left: 4vw;
-		padding-right: 4vw;
 	}
 
 	.card-number {
@@ -96,12 +92,12 @@
 	}
 
 	.card-content h2 {
-		margin: 0 0 34px;
+		margin: 0 0 28px;
 		font-family: var(--serif);
 		font-weight: 500;
-		line-height: 0.98;
+		line-height: 1;
 		letter-spacing: -0.035em;
-		font-size: clamp(46px, 5vw, 80px);
+		font-size: clamp(34px, 8vw, 46px);
 	}
 
 	.card-content > p {
@@ -122,23 +118,6 @@
 		border-bottom: 1px solid currentColor;
 		opacity: 0.78;
 		font-size: 14px;
-	}
-
-	.vertical-yachting .card-content {
-		max-width: 760px;
-	}
-
-	.vertical-yachting .card-content h2 {
-		font-size: clamp(54px, 6vw, 96px);
-	}
-
-	.vertical-capital .card-content h2 {
-		font-size: clamp(36px, 3.5vw, 58px);
-	}
-
-	.vertical-capital .card-content > p,
-	.vertical-capital .card-content li {
-		font-size: 13px;
 	}
 
 	.card-visual {
@@ -253,25 +232,58 @@
 		transform: rotate(106deg);
 	}
 
-	@media (max-width: 980px) {
-		.verticals {
-			grid-template-columns: 1fr;
-		}
-
+	@media (min-width: 681px) {
 		.vertical-card {
 			min-height: 720px;
+			padding: 80px 6vw;
 		}
 
 		.vertical-capital {
 			min-height: 620px;
 		}
+
+		.card-content h2 {
+			font-size: clamp(46px, 5vw, 80px);
+			line-height: 0.98;
+			margin-bottom: 34px;
+		}
 	}
 
-	@media (max-width: 680px) {
+	/* Yachting is the primary business, so above 981px it takes the wider column
+	   and the larger type; strategic connections becomes the sidebar. */
+	@media (min-width: 981px) {
+		.verticals {
+			grid-template-columns: 1.45fr 0.55fr;
+		}
+
 		.vertical-card {
-			min-height: 760px;
-			padding-left: 24px;
-			padding-right: 24px;
+			min-height: 840px;
+		}
+
+		.vertical-yachting {
+			padding-right: 8vw;
+		}
+
+		.vertical-yachting .card-content {
+			max-width: 760px;
+		}
+
+		.vertical-yachting .card-content h2 {
+			font-size: clamp(54px, 6vw, 96px);
+		}
+
+		.vertical-capital {
+			padding-left: 4vw;
+			padding-right: 4vw;
+		}
+
+		.vertical-capital .card-content h2 {
+			font-size: clamp(36px, 3.5vw, 58px);
+		}
+
+		.vertical-capital .card-content > p,
+		.vertical-capital .card-content li {
+			font-size: 13px;
 		}
 	}
 </style>

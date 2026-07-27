@@ -46,11 +46,12 @@
 <style>
 	.hero {
 		min-height: 100vh;
+		/* svh accounts for mobile browser chrome, so the hero is not cut off. */
+		min-height: 100svh;
 		position: relative;
 		display: grid;
-		grid-template-columns: 1.05fr 0.95fr;
 		align-items: center;
-		padding: 140px 5vw 90px;
+		padding: 128px 24px 96px;
 		overflow: hidden;
 	}
 
@@ -77,7 +78,7 @@
 		font-weight: 500;
 		line-height: 0.98;
 		letter-spacing: -0.035em;
-		font-size: clamp(58px, 7.5vw, 126px);
+		font-size: clamp(38px, 10.5vw, 58px);
 		max-width: 900px;
 	}
 
@@ -85,7 +86,7 @@
 		display: block;
 		color: var(--grey);
 		font-style: italic;
-		font-size: 0.58em;
+		font-size: 0.6em;
 		line-height: 1.08;
 		margin-top: 20px;
 		max-width: 770px;
@@ -95,31 +96,39 @@
 		max-width: 620px;
 		color: #c6c6c1;
 		font-size: clamp(16px, 1.4vw, 20px);
-		margin: 36px 0 40px;
+		margin: 32px 0 36px;
 	}
 
 	.hero-actions {
 		display: flex;
-		align-items: center;
-		gap: 28px;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
 	}
 
 	.hero-bottom {
 		position: absolute;
-		left: 5vw;
-		right: 5vw;
-		bottom: 28px;
+		left: 24px;
+		right: 24px;
+		bottom: 24px;
 		display: flex;
 		justify-content: space-between;
+		gap: 12px;
 		border-top: 1px solid var(--line);
 		padding-top: 18px;
 		text-transform: uppercase;
-		letter-spacing: 0.18em;
+		letter-spacing: 0.16em;
 		font-size: 10px;
 		color: var(--grey);
 	}
 
+	/* On phones the illustration is atmosphere behind the copy rather than a
+	   column of its own. */
 	.hero-art {
+		position: absolute;
+		right: -43%;
+		bottom: 12%;
+		width: 105%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -134,69 +143,73 @@
 
 	.hero-yacht-visual {
 		display: block;
-		width: min(100%, 920px);
+		width: 100%;
 		height: auto;
 		object-fit: contain;
 		mix-blend-mode: screen;
 		filter: contrast(1.08) brightness(1.04);
-		opacity: 0.96;
+		opacity: 0.25;
 		transform: translateY(2%);
 		-webkit-mask-image: radial-gradient(ellipse 92% 86% at 50% 50%, #000 62%, transparent 100%);
 		mask-image: radial-gradient(ellipse 92% 86% at 50% 50%, #000 62%, transparent 100%);
 	}
 
-	@media (max-width: 980px) {
+	@media (min-width: 681px) {
 		.hero {
-			grid-template-columns: 1fr;
-			padding-top: 150px;
+			padding: 150px 5vw 90px;
+		}
+
+		.hero h1 {
+			font-size: clamp(58px, 7.5vw, 126px);
+		}
+
+		.hero h1 span {
+			font-size: 0.58em;
+		}
+
+		.hero-copy {
+			margin: 36px 0 40px;
+		}
+
+		.hero-actions {
+			flex-direction: row;
+			align-items: center;
+			gap: 28px;
+		}
+
+		.hero-bottom {
+			left: 5vw;
+			right: 5vw;
+			bottom: 28px;
+			letter-spacing: 0.18em;
 		}
 
 		.hero-art {
-			position: absolute;
 			width: 72%;
 			right: -9%;
 			bottom: 10%;
 		}
 
 		.hero-yacht-visual {
-			width: 100%;
 			opacity: 0.42;
 		}
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 981px) {
 		.hero {
-			padding-left: 24px;
-			padding-right: 24px;
+			grid-template-columns: 1.05fr 0.95fr;
+			padding-top: 140px;
 		}
 
-		.hero h1 {
-			font-size: 54px;
-		}
-
-		.hero h1 span {
-			font-size: 0.6em;
-		}
-
-		.hero-actions {
-			align-items: flex-start;
-			flex-direction: column;
-			gap: 20px;
-		}
-
-		.hero-bottom {
-			left: 24px;
-			right: 24px;
-		}
-
+		/* Wide enough for the illustration to become its own column. */
 		.hero-art {
-			width: 105%;
-			right: -43%;
-			bottom: 12%;
+			position: static;
+			width: auto;
 		}
 
 		.hero-yacht-visual {
-			opacity: 0.25;
+			width: min(100%, 920px);
+			opacity: 0.96;
 		}
 	}
 </style>

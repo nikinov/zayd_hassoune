@@ -25,9 +25,9 @@
 
 <style>
 	.marquee-block {
-		padding: 90px 5vw;
+		padding: 70px 24px;
 		display: grid;
-		gap: 60px;
+		gap: 44px;
 		border-bottom: 1px solid var(--line);
 	}
 
@@ -58,10 +58,10 @@
 		gap: 12px 34px;
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		.marquee-block {
-			padding: 70px 24px;
-			gap: 44px;
+			padding: 90px 5vw;
+			gap: 60px;
 		}
 	}
 </style>

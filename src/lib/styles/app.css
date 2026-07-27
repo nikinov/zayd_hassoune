@@ -139,8 +139,16 @@ main:focus {
 	gap: 8px;
 }
 
+/* Single column on phones, so nothing needs to span; the two-column form kicks
+   in at 681px along with the span. */
 .field-full {
-	grid-column: 1 / -1;
+	grid-column: auto;
+}
+
+@media (min-width: 681px) {
+	.field-full {
+		grid-column: 1 / -1;
+	}
 }
 
 .field label {
@@ -199,8 +207,3 @@ main:focus {
 	}
 }
 
-@media (max-width: 680px) {
-	.field-full {
-		grid-column: auto;
-	}
-}

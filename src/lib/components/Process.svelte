@@ -22,17 +22,17 @@
 
 <style>
 	.process {
-		padding: 140px 7vw;
+		padding: 100px 24px;
 		border-bottom: 1px solid var(--line);
 	}
 
 	.process-heading h2 {
-		margin: 0 0 70px;
+		margin: 0 0 48px;
 		font-family: var(--serif);
 		font-weight: 500;
-		line-height: 0.98;
+		line-height: 1;
 		letter-spacing: -0.035em;
-		font-size: clamp(42px, 5vw, 76px);
+		font-size: clamp(34px, 8vw, 46px);
 	}
 
 	.steps {
@@ -40,7 +40,6 @@
 		margin: 0;
 		padding: 0;
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
 		gap: 1px;
 		background: var(--line);
 		border: 1px solid var(--line);
@@ -48,7 +47,7 @@
 
 	.steps li {
 		background: var(--black);
-		padding: 36px 30px 44px;
+		padding: 30px 24px 36px;
 	}
 
 	.step-number {
@@ -71,19 +70,30 @@
 		color: var(--grey);
 	}
 
-	@media (max-width: 1180px) {
+	@media (min-width: 681px) {
+		.process {
+			padding: 140px 7vw;
+		}
+
+		.process-heading h2 {
+			margin-bottom: 70px;
+			line-height: 0.98;
+			font-size: clamp(42px, 5vw, 76px);
+		}
+
 		.steps {
 			grid-template-columns: repeat(2, 1fr);
 		}
+
+		.steps li {
+			padding: 36px 30px 44px;
+		}
 	}
 
-	@media (max-width: 680px) {
-		.process {
-			padding: 100px 24px;
-		}
-
+	/* Five across only once each column can still hold a readable measure. */
+	@media (min-width: 1181px) {
 		.steps {
-			grid-template-columns: 1fr;
+			grid-template-columns: repeat(5, 1fr);
 		}
 	}
 </style>

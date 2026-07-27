@@ -32,7 +32,7 @@
 	.contact {
 		background: var(--white);
 		color: var(--black);
-		padding: 120px 7vw;
+		padding: 100px 24px;
 		border-top: 1px solid var(--dark-line);
 	}
 
@@ -40,30 +40,27 @@
 		margin: 0;
 		font-family: var(--serif);
 		font-weight: 500;
-		line-height: 0.98;
+		line-height: 1;
 		letter-spacing: -0.035em;
-		font-size: clamp(48px, 6vw, 86px);
+		font-size: clamp(36px, 8vw, 48px);
 	}
 
 	.contact-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-		margin: 70px 0;
+		margin: 50px 0;
 		border-top: 1px solid var(--dark-line);
 		border-bottom: 1px solid var(--dark-line);
 	}
 
 	.contact-grid > :global(*) {
-		padding: 30px 20px 30px 0;
-		font-size: 18px;
+		padding: 22px 0;
+		font-size: 17px;
+		/* Long addresses must not force the page to scroll sideways. */
+		overflow-wrap: anywhere;
 	}
 
 	.contact-grid > :global(*:not(:last-child)) {
-		border-right: 1px solid var(--dark-line);
-	}
-
-	.contact-grid > :global(*:not(:first-child)) {
-		padding-left: 30px;
+		border-bottom: 1px solid var(--dark-line);
 	}
 
 	.contact-grid span {
@@ -75,23 +72,44 @@
 		margin-bottom: 8px;
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		.contact {
-			padding: 100px 24px;
+			padding: 120px 7vw;
+		}
+
+		.contact h2 {
+			line-height: 0.98;
+			font-size: clamp(48px, 6vw, 86px);
 		}
 
 		.contact-grid {
-			grid-template-columns: 1fr;
+			margin: 70px 0;
 		}
 
 		.contact-grid > :global(*) {
-			border-right: 0;
-			border-bottom: 1px solid var(--dark-line);
-			padding: 22px 0;
+			padding: 26px 0;
+			font-size: 18px;
+		}
+	}
+
+	/* Three across only once the columns are wide enough for an email address to
+	   sit on one line. */
+	@media (min-width: 981px) {
+		.contact-grid {
+			grid-template-columns: repeat(3, 1fr);
 		}
 
-		.contact-grid > :global(*:last-child) {
+		.contact-grid > :global(*) {
+			padding: 30px 20px 30px 0;
+		}
+
+		.contact-grid > :global(*:not(:last-child)) {
 			border-bottom: 0;
+			border-right: 1px solid var(--dark-line);
+		}
+
+		.contact-grid > :global(*:not(:first-child)) {
+			padding-left: 30px;
 		}
 	}
 </style>

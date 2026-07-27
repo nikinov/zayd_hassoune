@@ -27,12 +27,13 @@
 		class:active={open}
 		aria-label={open ? 'Close menu' : 'Open menu'}
 		aria-expanded={open}
+		aria-controls="main-nav"
 		onclick={() => (open = !open)}
 	>
 		<span></span><span></span>
 	</button>
 
-	<nav class="main-nav" class:open>
+	<nav id="main-nav" class="main-nav" class:open>
 		{#each nav as item (item.href)}
 			<a href={item.href} onclick={() => (open = false)}>{item.label}</a>
 		{/each}
@@ -41,6 +42,8 @@
 </header>
 
 <style>
+	/* Mobile first: the base rules are the phone layout, widened at 681px and
+	   again at 981px. */
 	.site-header {
 		position: fixed;
 		top: 0;
@@ -49,30 +52,43 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding: 24px 5vw;
+		gap: 16px;
+		padding: 16px 24px;
 		z-index: 20;
 		mix-blend-mode: difference;
-		transition:
-			padding 0.35s ease,
-			background-color 0.35s ease,
-			border-color 0.35s ease;
+		transition: padding 0.35s ease;
+	}
+
+	/* The blurred bar lives on a pseudo-element rather than on .site-header
+	   itself: backdrop-filter would make the header a containing block for
+	   fixed-position descendants, which drags the fullscreen mobile nav inside
+	   the header box and leaves its links showing through. */
+	.site-header::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		background: rgba(5, 5, 5, 0.72);
+		backdrop-filter: blur(16px) saturate(140%);
+		-webkit-backdrop-filter: blur(16px) saturate(140%);
+		border-bottom: 1px solid var(--line);
+		opacity: 0;
+		transition: opacity 0.35s ease;
 	}
 
 	.site-header.scrolled {
 		mix-blend-mode: normal;
 		color: var(--white);
-		padding-top: 16px;
-		padding-bottom: 16px;
-		background: rgba(5, 5, 5, 0.72);
-		backdrop-filter: blur(16px) saturate(140%);
-		-webkit-backdrop-filter: blur(16px) saturate(140%);
-		border-bottom: 1px solid var(--line);
+	}
+
+	.site-header.scrolled::before {
+		opacity: 1;
 	}
 
 	/* Without backdrop-filter support the translucent bar would leave the light
 	   sections showing through behind white text. */
-	@supports not (backdrop-filter: blur(1px)) {
-		.site-header.scrolled {
+	@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+		.site-header::before {
 			background: rgba(5, 5, 5, 0.94);
 		}
 	}
@@ -90,6 +106,7 @@
 	.brand-mark {
 		display: grid;
 		place-items: center;
+		flex: 0 0 auto;
 		width: 38px;
 		height: 38px;
 		border: 1px solid currentColor;
@@ -98,13 +115,35 @@
 		letter-spacing: 0;
 	}
 
+	.brand-name {
+		display: none;
+	}
+
 	.main-nav {
+		position: fixed;
+		inset: 0;
+		z-index: 1;
+		background: var(--black);
 		display: flex;
-		gap: 34px;
+		flex-direction: column;
+		justify-content: center;
 		align-items: center;
-		font-size: 12px;
+		gap: 32px;
+		font-size: 17px;
 		text-transform: uppercase;
 		letter-spacing: 0.08em;
+		mix-blend-mode: normal;
+		transform: translateY(-100%);
+		visibility: hidden;
+		transition:
+			transform 0.4s ease,
+			visibility 0.4s ease;
+	}
+
+	/* Hidden until opened, so off-screen links cannot be tabbed into. */
+	.main-nav.open {
+		transform: translateY(0);
+		visibility: visible;
 	}
 
 	.main-nav a {
@@ -112,7 +151,8 @@
 		transition: opacity 0.3s ease;
 	}
 
-	.main-nav a:hover {
+	.main-nav a:hover,
+	.main-nav a:focus-visible {
 		opacity: 1;
 	}
 
@@ -123,69 +163,89 @@
 	}
 
 	.menu-toggle {
-		display: none;
-		border: 0;
-		background: transparent;
-		width: 34px;
-		height: 30px;
+		/* 44px keeps the tap target at the recommended minimum; the bars stay 34px. */
 		position: relative;
+		z-index: 2;
+		display: block;
+		width: 44px;
+		height: 44px;
+		margin-right: -5px;
+		border: 0;
+		padding: 0;
+		background: transparent;
+		color: inherit;
 		cursor: pointer;
 	}
 
 	.menu-toggle span {
 		position: absolute;
-		left: 0;
-		width: 100%;
+		left: 5px;
+		width: 34px;
 		height: 1px;
-		background: white;
+		background: currentColor;
 		transition: 0.3s ease;
 	}
 
 	.menu-toggle span:first-child {
-		top: 10px;
+		top: 17px;
 	}
 
 	.menu-toggle span:last-child {
-		top: 20px;
+		top: 27px;
 	}
 
-	@media (max-width: 980px) {
-		.main-nav {
-			position: fixed;
-			inset: 0;
-			background: var(--black);
-			flex-direction: column;
-			justify-content: center;
-			gap: 32px;
-			font-size: 17px;
-			transform: translateY(-100%);
-			transition: transform 0.4s ease;
-			mix-blend-mode: normal;
+	.menu-toggle.active span:first-child {
+		top: 22px;
+		transform: rotate(45deg);
+	}
+
+	.menu-toggle.active span:last-child {
+		top: 22px;
+		transform: rotate(-45deg);
+	}
+
+	@media (min-width: 681px) {
+		.site-header {
+			padding: 20px 5vw;
 		}
 
-		.main-nav.open {
-			transform: translateY(0);
+		.brand-name {
+			display: block;
+		}
+	}
+
+	@media (min-width: 981px) {
+		.site-header {
+			padding: 24px 5vw;
+		}
+
+		.site-header.scrolled {
+			padding-top: 16px;
+			padding-bottom: 16px;
+		}
+
+		.main-nav {
+			position: static;
+			z-index: auto;
+			background: transparent;
+			flex-direction: row;
+			gap: 34px;
+			font-size: 12px;
+			transform: none;
+			visibility: visible;
 		}
 
 		.menu-toggle {
-			display: block;
-			z-index: 2;
-		}
-
-		.menu-toggle.active span:first-child {
-			top: 15px;
-			transform: rotate(45deg);
-		}
-
-		.menu-toggle.active span:last-child {
-			top: 15px;
-			transform: rotate(-45deg);
+			display: none;
 		}
 	}
 
-	@media (max-width: 680px) {
-		.brand-name {
-			display: none;
+	@media (prefers-reduced-motion: reduce) {
+		.site-header,
+		.site-header::before,
+		.main-nav,
+		.menu-toggle span {
+			transition: none;
 		}
 	}
 </style>

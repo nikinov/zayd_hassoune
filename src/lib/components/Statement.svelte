@@ -12,7 +12,7 @@
 
 <style>
 	.statement {
-		padding: 160px 10vw;
+		padding: 110px 24px;
 		border-bottom: 1px solid var(--line);
 	}
 
@@ -25,9 +25,9 @@
 		letter-spacing: -0.03em;
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		.statement {
-			padding: 110px 24px;
+			padding: 160px 10vw;
 		}
 	}
 </style>

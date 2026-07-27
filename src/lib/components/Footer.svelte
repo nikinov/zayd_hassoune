@@ -13,9 +13,9 @@
 <style>
 	footer {
 		display: flex;
-		justify-content: space-between;
-		gap: 20px;
-		padding: 28px 5vw;
+		flex-direction: column;
+		gap: 14px;
+		padding: 28px 24px;
 		border-top: 1px solid var(--line);
 		font-size: 10px;
 		letter-spacing: 0.13em;
@@ -23,9 +23,12 @@
 		color: var(--grey);
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		footer {
-			flex-direction: column;
+			flex-direction: row;
+			justify-content: space-between;
+			gap: 20px;
+			padding: 28px 5vw;
 		}
 	}
 </style>

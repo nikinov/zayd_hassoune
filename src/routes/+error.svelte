@@ -21,7 +21,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		padding: 160px 7vw 120px;
+		padding: 140px 24px 100px;
 	}
 
 	.error h1 {
@@ -30,7 +30,7 @@
 		font-weight: 500;
 		line-height: 1;
 		letter-spacing: -0.035em;
-		font-size: clamp(42px, 6vw, 88px);
+		font-size: clamp(34px, 8vw, 88px);
 		max-width: 900px;
 	}
 
@@ -44,9 +44,9 @@
 		align-self: flex-start;
 	}
 
-	@media (max-width: 680px) {
+	@media (min-width: 681px) {
 		.error {
-			padding: 140px 24px 100px;
+			padding: 160px 7vw 120px;
 		}
 	}
 </style>
