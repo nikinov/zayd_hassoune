@@ -57,15 +57,39 @@ The form reproduces the prototype's conditional flow: choosing **Yachting enquir
 reveals a service selector, which in turn swaps in the charter, sale or acquisition
 questionnaire; any other choice shows a plain message box instead.
 
-Submission is wired to an optional endpoint. Copy `.env.example` to `.env` and set:
+Submission POSTs the form's `FormData` to `/api/contact`
+([src/routes/api/contact/+server.ts](src/routes/api/contact/+server.ts)), which validates
+it and mails the enquiry to **contact@zaydhassoune.com**. Every field the form sent is
+listed in the mail under its own label — the labels come from `src/lib/data/site.ts`, so a
+new questionnaire question needs no change to the endpoint — and the reply-to is set to the
+enquirer, so replying from the inbox answers them directly. A hidden `company_website`
+field is a honeypot: filled in, the submission is accepted and dropped.
+
+Setting `PUBLIC_FORM_ENDPOINT` overrides the internal route, for a Formspree or CRM
+deployment instead.
+
+### Email (Brevo)
+
+Mail goes out through Brevo's transactional API — the same client and account as the boat
+management app, ported to [src/lib/server/email.ts](src/lib/server/email.ts). Copy
+`.env.example` to `.env.local` and set:
 
 ```
-PUBLIC_FORM_ENDPOINT=https://formspree.io/f/xxxxxxx
+BREVO_API_KEY=xkeysib-…                                    # Brevo > SMTP & API
+EMAIL_FROM=Zayd Hassoune <no-reply@boat.nicholasnovelle.com>
+CONTACT_TO=contact@zaydhassoune.com
 ```
 
-The form then POSTs its `FormData` there (works with Formspree, Brevo, HubSpot forms, a
-CRM webhook or your own function). Left unset, the form validates and confirms locally
-without sending anything, so the site is safe to deploy before the CRM is chosen.
+`boat.nicholasnovelle.com` is the domain already authenticated in that Brevo account, so it
+is the sender; authenticate `zaydhassoune.com` there to send from it instead.
+
+Without `BREVO_API_KEY` — or with `EMAIL_DISABLED=1` — nothing is sent and the whole
+message is printed to the server log, so the form works end to end locally without a live
+key. Brevo's account can restrict sending to authorised IPs (**Security > Authorised
+IPs**); an unlisted address gets a 401 back and the endpoint answers 502.
+
+This is the only route in the site that is not prerendered, so it deploys as the single
+serverless function alongside the static assets.
 
 ## SEO
 

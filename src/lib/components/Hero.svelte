@@ -23,7 +23,13 @@
 		</div>
 	</div>
 
-	<div class="hero-art" use:reveal={{ delay: true }} aria-hidden="true">
+	<!-- No reveal on this one. The illustration is a near-opaque dark PNG that
+	     only disappears into the page because it is screen-blended, and blending
+	     reaches the page only from inside the same stacking context — the fade's
+	     transform and opacity each make one, which is what put a dark rectangle
+	     over the copy. It is also the LCP element, so it is better painted
+	     straight away than faded in. -->
+	<div class="hero-art" aria-hidden="true">
 		<!-- Decorative, but it is the LCP element: eager + high priority, served as
 		     AVIF/WebP at several widths by enhanced-img. -->
 		<enhanced:img
@@ -66,7 +72,6 @@
 	}
 
 	.hero-content,
-	.hero-art,
 	.hero-bottom {
 		position: relative;
 		z-index: 2;
@@ -123,7 +128,10 @@
 	}
 
 	/* On phones the illustration is atmosphere behind the copy rather than a
-	   column of its own. */
+	   column of its own — and it carries no z-index on purpose: a z-index makes
+	   a stacking context, which would seal the blend in (see above) as well as
+	   lift the image over the copy. At z-index auto it sits under .hero-content
+	   and screens onto the black behind it. */
 	.hero-art {
 		position: absolute;
 		right: -43%;

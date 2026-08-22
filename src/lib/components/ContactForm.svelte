@@ -18,13 +18,9 @@
 	async function handleSubmit(event: SubmitEvent) {
 		event.preventDefault();
 		const form = event.currentTarget as HTMLFormElement;
-		const endpoint = env.PUBLIC_FORM_ENDPOINT;
-
-		if (!endpoint) {
-			status =
-				'Thank you. Your enquiry has been prepared. The form still needs to be connected to a mail service or CRM (set PUBLIC_FORM_ENDPOINT).';
-			return;
-		}
+		// The site's own endpoint mails the enquiry to contact@zaydhassoune.com;
+		// PUBLIC_FORM_ENDPOINT overrides it for a Formspree or CRM deployment.
+		const endpoint = env.PUBLIC_FORM_ENDPOINT || '/api/contact';
 
 		sending = true;
 		status = '';
@@ -51,6 +47,12 @@
 </script>
 
 <form class="contact-form" onsubmit={handleSubmit}>
+	<!-- Not shown, not tabbable: only a bot fills this, and the server drops it. -->
+	<div class="honeypot" aria-hidden="true">
+		<label for="company_website">Company website</label>
+		<input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+	</div>
+
 	<div class="field">
 		<label for="name">Name</label>
 		<input id="name" name="name" type="text" required />
@@ -122,6 +124,15 @@
 
 	.conditional-field {
 		animation: fade-field 0.35s ease;
+	}
+
+	.honeypot {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 
 	.form-status {
