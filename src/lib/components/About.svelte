@@ -7,13 +7,6 @@
 	<div class="about-heading" use:reveal>
 		<p class="eyebrow">About</p>
 		<h2>A relationship-driven approach.</h2>
-		<enhanced:img
-			class="portrait"
-			src="$lib/assets/zayd.webp?w=600;400"
-			sizes="(max-width: 980px) 90vw, 32vw"
-			alt="{site.name}, private yacht broker based in {site.location}"
-			loading="lazy"
-		/>
 	</div>
 
 	<div class="about-copy" use:reveal={{ delay: true }}>
@@ -55,19 +48,6 @@
 		line-height: 1;
 		letter-spacing: -0.035em;
 		font-size: clamp(36px, 8vw, 48px);
-	}
-
-	.about-heading :global(picture) {
-		display: contents;
-	}
-
-	.portrait {
-		display: block;
-		width: 100%;
-		height: auto;
-		margin-top: 36px;
-		filter: grayscale(100%) contrast(1.06);
-		border-radius: 4px;
 	}
 
 	.about-copy {

@@ -48,29 +48,6 @@ export const verticals = [
 	}
 ];
 
-/** Preferred shipyards, as listed on zaydhassoune.com. */
-export const shipyards = [
-	'Benetti',
-	'Sanlorenzo',
-	'Itama',
-	'Princess',
-	'Pardo',
-	'Technomar',
-	'Absolute'
-];
-
-/** Client hubs, as listed on zaydhassoune.com. */
-export const locations = [
-	'Geneva',
-	'Monaco',
-	'London',
-	'Singapore',
-	'Americas',
-	'Dubai',
-	'Riyadh',
-	'Doha'
-];
-
 /** The five-step engagement from zaydhassoune.com. */
 export const process = [
 	{

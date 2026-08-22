@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/public';
-import { locations, process, shipyards, site, verticals } from './site';
+import { process, site, verticals } from './site';
 
 /**
  * Absolute origin used for canonical URLs, Open Graph tags and the sitemap.
@@ -47,14 +47,16 @@ export function structuredData() {
 					addressLocality: 'Monaco',
 					addressCountry: 'MC'
 				},
-				areaServed: locations.map((name) => ({ '@type': 'Place', name })),
+				areaServed: ['Monaco', 'Europe', 'Middle East'].map((name) => ({
+					'@type': 'Place',
+					name
+				})),
 				knowsAbout: [
 					'Yacht brokerage',
 					'Yacht acquisition',
 					'Yacht chartering',
 					'Owner representation',
-					'Off-market yacht opportunities',
-					...shipyards.map((yard) => `${yard} yachts`)
+					'Off-market yacht opportunities'
 				],
 				hasOfferCatalog: {
 					'@type': 'OfferCatalog',
