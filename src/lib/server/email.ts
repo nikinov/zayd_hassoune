@@ -8,7 +8,9 @@
  * can still be walked through end to end without a live key.
  *
  * Configuration (environment, or .env.local):
- *   BREVO_API_KEY   the v3 API key
+ *   BREVO_SMTP_LOGIN  SMTP login (Brevo > SMTP & API > SMTP), e.g. 1234@smtp-brevo.com
+ *   BREVO_SMTP_KEY    SMTP key ("xsmtpsib-…"); with the login, mail goes via SMTP
+ *   BREVO_API_KEY     or a v3 API key ("xkeysib-…") to send through the REST API
  *   EMAIL_FROM      "Zayd Hassoune <no-reply@boat.nicholasnovelle.com>" by
  *                   default — the domain must be authenticated in Brevo, and
  *                   boat.nicholasnovelle.com is the one that already is
@@ -16,6 +18,7 @@
  */
 
 import { env } from '$env/dynamic/private';
+import nodemailer from 'nodemailer';
 import { site } from '$lib/data/site';
 
 const BREVO_ENDPOINT = 'https://api.brevo.com/v3/smtp/email';
@@ -25,18 +28,36 @@ const DEFAULT_FROM = `${site.name} <no-reply@boat.nicholasnovelle.com>`;
 
 export type Mail = { to: string; subject: string; text: string; html: string; replyTo?: string };
 
-/** The API key from the environment; null when it is not configured. */
-function apiKey(): string | null {
+const SMTP_HOST = 'smtp-relay.brevo.com';
+const SMTP_PORT = 587;
+
+type Transport =
+	| { kind: 'smtp'; login: string; key: string }
+	| { kind: 'api'; key: string }
+	| null;
+
+/**
+ * How mail leaves: Brevo's SMTP relay when an SMTP login and key are set
+ * (keys starting "xsmtpsib-"), otherwise the REST API when an API key is set
+ * ("xkeysib-"). The two kinds of key are not interchangeable. Null when
+ * neither is configured.
+ */
+function transport(): Transport {
 	// A checkout may carry a real key, so a test that finishes a mail run would
 	// post to Brevo for real. EMAIL_DISABLED is how a test or preview
 	// environment says "log it, do not send it".
 	if (env.EMAIL_DISABLED === '1') return null;
-	return env.BREVO_API_KEY?.trim() || null;
+	const login = env.BREVO_SMTP_LOGIN?.trim();
+	const smtpKey = env.BREVO_SMTP_KEY?.trim();
+	if (login && smtpKey) return { kind: 'smtp', login, key: smtpKey };
+	const apiKey = env.BREVO_API_KEY?.trim();
+	if (apiKey) return { kind: 'api', key: apiKey };
+	return null;
 }
 
 /** True when mail will actually leave the box (a key is configured). */
 export function emailConfigured(): boolean {
-	return apiKey() !== null;
+	return transport() !== null;
 }
 
 /** Where enquiries are delivered. */
@@ -57,16 +78,35 @@ function sender(): { name: string; email: string } {
  * the request that triggered it should fail.
  */
 export async function sendMail(mail: Mail): Promise<void> {
-	const key = apiKey();
-	if (!key) {
+	const t = transport();
+	if (!t) {
 		console.log(
 			`[email] not configured — would send to ${mail.to}: ${mail.subject}\n${mail.text}`
 		);
 		return;
 	}
+	if (t.kind === 'smtp') {
+		const from = sender();
+		const smtp = nodemailer.createTransport({
+			host: SMTP_HOST,
+			port: SMTP_PORT,
+			secure: false, // STARTTLS on 587
+			requireTLS: true,
+			auth: { user: t.login, pass: t.key }
+		});
+		await smtp.sendMail({
+			from: { name: from.name, address: from.email },
+			to: mail.to,
+			...(mail.replyTo ? { replyTo: mail.replyTo } : {}),
+			subject: mail.subject,
+			text: mail.text,
+			html: mail.html
+		});
+		return;
+	}
 	const res = await fetch(BREVO_ENDPOINT, {
 		method: 'POST',
-		headers: { 'api-key': key, 'content-type': 'application/json', accept: 'application/json' },
+		headers: { 'api-key': t.key, 'content-type': 'application/json', accept: 'application/json' },
 		body: JSON.stringify({
 			sender: sender(),
 			to: [{ email: mail.to }],
@@ -150,6 +190,28 @@ export function enquiryMail(opts: {
 		...layout({
 			title: 'New enquiry',
 			intro: `${opts.name} (${opts.email}) submitted the contact form. Reply to this mail to answer them directly.`,
+			rows: opts.rows
+		})
+	};
+}
+
+/**
+ * The acknowledgement sent back to the person who filled in the form, with a
+ * copy of their answers. Replies go to the contact inbox.
+ */
+export function confirmationMail(opts: {
+	to: string;
+	name: string;
+	replyTo: string;
+	rows: Array<[string, string]>;
+}): Mail {
+	return {
+		to: opts.to,
+		replyTo: opts.replyTo,
+		subject: `We received your enquiry — ${site.name}`,
+		...layout({
+			title: 'Thank you for your enquiry',
+			intro: `Dear ${opts.name}, thank you for getting in touch. We have received your message and will reply shortly. A copy of what you sent is below.`,
 			rows: opts.rows
 		})
 	};

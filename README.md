@@ -75,7 +75,10 @@ management app, ported to [src/lib/server/email.ts](src/lib/server/email.ts). Co
 `.env.example` to `.env.local` and set:
 
 ```
-BREVO_API_KEY=xkeysib-…                                    # Brevo > SMTP & API
+BREVO_SMTP_LOGIN=…@smtp-brevo.com                          # Brevo > SMTP & API > SMTP
+BREVO_SMTP_KEY=xsmtpsib-…
+# or, instead of the two above, an API key (API Keys tab):
+# BREVO_API_KEY=xkeysib-…
 EMAIL_FROM=Zayd Hassoune <no-reply@boat.nicholasnovelle.com>
 CONTACT_TO=contact@zaydhassoune.com
 ```
@@ -83,7 +86,8 @@ CONTACT_TO=contact@zaydhassoune.com
 `boat.nicholasnovelle.com` is the domain already authenticated in that Brevo account, so it
 is the sender; authenticate `zaydhassoune.com` there to send from it instead.
 
-Without `BREVO_API_KEY` — or with `EMAIL_DISABLED=1` — nothing is sent and the whole
+An SMTP key only works over SMTP and an API key only over the API; putting an `xsmtpsib-`
+key in `BREVO_API_KEY` gets a 401 "Key not found". Without any key — or with `EMAIL_DISABLED=1` — nothing is sent and the whole
 message is printed to the server log, so the form works end to end locally without a live
 key. Brevo's account can restrict sending to authorised IPs (**Security > Authorised
 IPs**); an unlisted address gets a 401 back and the endpoint answers 502.

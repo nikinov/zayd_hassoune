@@ -7,7 +7,7 @@
  */
 
 import { json, type RequestHandler } from '@sveltejs/kit';
-import { contactAddress, enquiryMail, sendMail } from '$lib/server/email';
+import { confirmationMail, contactAddress, enquiryMail, sendMail } from '$lib/server/email';
 import { interestOptions, questionnaires, yachtingServices } from '$lib/data/site';
 
 export const prerender = false;
@@ -81,6 +81,14 @@ export const POST: RequestHandler = async ({ request }) => {
 	} catch (err) {
 		console.error('[contact] send failed', err);
 		return json({ error: 'The message could not be sent.' }, { status: 502 });
+	}
+
+	// The enquiry has reached the inbox, so a failed acknowledgement is logged
+	// rather than reported: the visitor's message was delivered either way.
+	try {
+		await sendMail(confirmationMail({ to: email, name, replyTo: contactAddress(), rows }));
+	} catch (err) {
+		console.error('[contact] confirmation failed', err);
 	}
 
 	return json({ ok: true });
